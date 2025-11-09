@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setUserData } from '../redux/userSlice'
 import { setPostData } from '../redux/postSlice'
 import { setLoopData } from '../redux/loopSlice'
+import { axiosInstance } from "../redux/axois";
 
 function getAllLoops() {
     const dispatch=useDispatch()
@@ -13,7 +14,7 @@ function getAllLoops() {
   useEffect(()=>{
 const fetchloops=async ()=>{
     try {
-        const result=await axios.get(`${serverUrl}/api/loop/getAll`,{withCredentials:true})
+        const result=await axiosInstance.get(`${serverUrl}/api/loop/getAll`,{withCredentials:true})
          dispatch(setLoopData(result.data))
     } catch (error) {
         console.log(error)

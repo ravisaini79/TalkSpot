@@ -4,6 +4,7 @@ import { serverUrl } from '../App'
 import { useDispatch, useSelector } from 'react-redux'
 import { setFollowing, setUserData } from '../redux/userSlice'
 import { setStoryList } from '../redux/storySlice'
+import { axiosInstance } from "../redux/axois";
 
 function getAllStories() {
     const dispatch=useDispatch()
@@ -12,7 +13,7 @@ function getAllStories() {
   useEffect(()=>{
 const fetchStories=async ()=>{
     try {
-        const result=await axios.get(`${serverUrl}/api/story/getAll`,{withCredentials:true})
+        const result=await axiosInstance.get(`${serverUrl}/api/story/getAll`,{withCredentials:true})
          dispatch(setStoryList(result.data))
          
     } catch (error) {

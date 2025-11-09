@@ -12,6 +12,7 @@ import FollowButton from '../components/FollowButton'
 import Post from '../components/Post'
 import { useState } from 'react'
 import { setSelectedUser } from '../redux/messageSlice'
+import { axiosInstance } from '../redux/axois'
 
 function Profile() {
 
@@ -23,7 +24,7 @@ function Profile() {
     const { postData } = useSelector(state => state.post)
     const handleProfile = async () => {
         try {
-            const result = await axios.get(`${serverUrl}/api/user/getProfile/${userName}`, { withCredentials: true })
+            const result = await axiosInstance.get(`${serverUrl}/api/user/getProfile/${userName}`, { withCredentials: true })
             dispatch(setProfileData(result.data))
         } catch (error) {
             console.log(error)
@@ -31,7 +32,7 @@ function Profile() {
     }
     const handleLogOut = async () => {
         try {
-            const result = await axios.get(`${serverUrl}/api/auth/signout`, { withCredentials: true })
+            const result = await axiosInstance.get(`${serverUrl}/api/auth/signout`, { withCredentials: true })
             dispatch(setUserData(null))
         } catch (error) {
             console.log(error)

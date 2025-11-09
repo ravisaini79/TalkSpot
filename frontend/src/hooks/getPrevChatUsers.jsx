@@ -5,14 +5,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setFollowing, setUserData } from '../redux/userSlice'
 import { setCurrentUserStory } from '../redux/storySlice'
 import { setPrevChatUsers } from '../redux/messageSlice'
-
+import { axiosInstance } from "../redux/axois";
 function getPrevChatUsers() {
     const dispatch=useDispatch()
     const {messages}=useSelector(state=>state.message)
   useEffect(()=>{
 const fetchUser=async ()=>{
     try {
-        const result=await axios.get(`${serverUrl}/api/message/prevChats`,{withCredentials:true})
+        const result=await axiosInstance.get(`${serverUrl}/api/message/prevChats`,{withCredentials:true})
          dispatch(setPrevChatUsers(result.data))
          console.log(result.data)
     } catch (error) {

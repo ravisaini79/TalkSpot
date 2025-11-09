@@ -26,7 +26,8 @@ const handleSignIn=async ()=>{
   setErr("")
   try {
     const result=await axios.post(`${serverUrl}/api/auth/signin`,{userName,password},{withCredentials:true})
-   dispatch(setUserData(result.data))
+   dispatch(setUserData(result.data?.user))
+   localStorage.setItem('jwt',result.data?.token)
     setLoading(false)
   } catch (error) {
     console.log(error)

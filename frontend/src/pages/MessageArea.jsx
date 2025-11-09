@@ -10,6 +10,7 @@ import axios from 'axios';
 import { serverUrl } from '../App';
 import { setMessages } from '../redux/messageSlice';
 import ReceiverMessage from '../components/ReceiverMessage';
+import { axiosInstance } from '../redux/axois';
 function MessageArea() {
   const {selectedUser,messages}=useSelector(state=>state.message)
     const {userData}=useSelector(state=>state.user)
@@ -35,7 +36,7 @@ const handleSendMessage=async (e)=>{
     if(backendImage){
        formData.append("image",backendImage)
     }
-    const result=await axios.post(`${serverUrl}/api/message/send/${selectedUser._id}`,formData,{withCredentials:true})
+    const result=await axiosInstance.post(`${serverUrl}/api/message/send/${selectedUser._id}`,formData,{withCredentials:true})
     dispatch(setMessages([...messages,result.data]))
     setInput("")
     setBackendImage(null)
@@ -47,7 +48,7 @@ const handleSendMessage=async (e)=>{
 
 const getAllMessages=async ()=>{
   try {
-    const result=await axios.get(`${serverUrl}/api/message/getAll/${selectedUser._id}`,{withCredentials:true})
+    const result=await axiosInstance.get(`${serverUrl}/api/message/getAll/${selectedUser._id}`,{withCredentials:true})
     dispatch(setMessages(result.data))
   } catch (error) {
     console.log(error)

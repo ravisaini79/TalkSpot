@@ -67,7 +67,10 @@ export const signIn=async (req,res)=>{
             sameSite:"Strict"
         })
 
-        return res.status(200).json(user)
+        return res.status(200).json({
+            user,
+            token:token
+        })
 
     } catch (error) {
         return res.status(500).json({message:`signin error ${error}`})

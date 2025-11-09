@@ -9,6 +9,7 @@ import axios from 'axios';
 import { serverUrl } from '../App';
 import { setProfileData, setUserData } from '../redux/userSlice';
 import { ClipLoader } from 'react-spinners';
+import { axiosInstance } from '../redux/axois';
 function EditProfile() {
     const { userData } = useSelector(state => state.user)
     const navigate = useNavigate()
@@ -40,7 +41,7 @@ function EditProfile() {
                if(backendImage){
                 formdata.append("profileImage",backendImage)
                }
-            const result=await axios.post(`${serverUrl}/api/user/editProfile`,formdata,{withCredentials:true})
+            const result=await axiosInstance.post(`${serverUrl}/api/user/editProfile`,formdata,{withCredentials:true})
             dispatch(setProfileData(result.data))
             dispatch(setUserData(result.data))
             setLoading(false)

@@ -3,6 +3,8 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { serverUrl } from '../App'
 import { setFollowing, toggleFollow } from '../redux/userSlice'
+import { axiosInstance } from '../redux/axois'
+
 
 function FollowButton({targetUserId,tailwind,onFollowChange}) {
     const {following}=useSelector(state=>state.user)
@@ -10,7 +12,7 @@ function FollowButton({targetUserId,tailwind,onFollowChange}) {
     const dispatch=useDispatch()
     const handleFollow=async ()=>{
         try {
-            const result=await axios.get(`${serverUrl}/api/user/follow/${targetUserId}`,{withCredentials:true})
+            const result=await axiosInstance.get(`${serverUrl}/api/user/follow/${targetUserId}`,{withCredentials:true})
             if(onFollowChange){
                 onFollowChange()
             }

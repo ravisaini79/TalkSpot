@@ -13,6 +13,7 @@ import { setCurrentUserStory, setStoryData } from '../redux/storySlice';
 import { setLoopData } from '../redux/loopSlice';
 import { ClipLoader } from 'react-spinners';
 import { setUserData } from '../redux/userSlice';
+import { axiosInstance } from '../redux/axois';
 function Upload() {
     const navigate = useNavigate()
     const [uploadType, setUploadType] = useState("post")
@@ -45,7 +46,7 @@ const uploadPost=async ()=>{
         formData.append("caption",caption)
         formData.append("mediaType",mediaType)
         formData.append("media",backendMedia)
-        const result=await axios.post(`${serverUrl}/api/post/upload`,formData,{withCredentials:true})
+        const result=await axiosInstance.post(`${serverUrl}/api/post/upload`,formData,{withCredentials:true})
        dispatch(setPostData([...postData,result.data]))
        setLoading(false)
        navigate("/")
@@ -59,7 +60,7 @@ const uploadStory=async ()=>{
         const formData=new FormData()
         formData.append("mediaType",mediaType)
         formData.append("media",backendMedia)
-        const result=await axios.post(`${serverUrl}/api/story/upload`,formData,{withCredentials:true})
+        const result=await axiosInstance.post(`${serverUrl}/api/story/upload`,formData,{withCredentials:true})
        dispatch(setCurrentUserStory(result.data))
          setLoading(false)
        navigate("/")
@@ -72,7 +73,7 @@ const uploadLoop=async ()=>{
         const formData=new FormData()
         formData.append("caption",caption)
         formData.append("media",backendMedia)
-        const result=await axios.post(`${serverUrl}/api/loop/upload`,formData,{withCredentials:true})
+        const result=await axiosInstance.post(`${serverUrl}/api/loop/upload`,formData,{withCredentials:true})
          dispatch(setLoopData([...loopData,result.data]))
          setLoading(false)
        navigate("/")

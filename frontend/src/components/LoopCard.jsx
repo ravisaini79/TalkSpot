@@ -14,6 +14,7 @@ import { setLoopData } from '../redux/loopSlice';
 import axios from 'axios';
 import { serverUrl } from '../App';
 import { IoSendSharp } from "react-icons/io5";
+import { axiosInstance } from '../redux/axois';
 function LoopCard({ loop }) {
     const videoRef = useRef()
 const [isPlaying,setIsPlaying]=useState(true)
@@ -52,7 +53,7 @@ const handleClick=()=>{
 
 const handleLike=async ()=>{
     try {
-      const result=await axios.get(`${serverUrl}/api/loop/like/${loop._id}`,{withCredentials:true})
+      const result=await axiosInstance.get(`${serverUrl}/api/loop/like/${loop._id}`,{withCredentials:true})
       const updatedLoop=result.data
 
       const updatedLoops=loopData.map(p=>p._id==loop._id?updatedLoop:p)
@@ -64,7 +65,7 @@ const handleLike=async ()=>{
   const handleComment=async ()=>{
     
     try {
-      const result=await axios.post(`${serverUrl}/api/loop/comment/${loop._id}`,{message},{withCredentials:true})
+      const result=await axiosInstance.post(`${serverUrl}/api/loop/comment/${loop._id}`,{message},{withCredentials:true})
       const updatedLoop=result.data
 
       const updatedLoops=loopData.map(p=>p._id==loop._id?updatedLoop:p)

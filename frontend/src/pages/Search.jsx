@@ -7,6 +7,7 @@ import { serverUrl } from '../App';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearchData } from '../redux/userSlice';
 import dp from "../assets/dp.webp"
+import { axiosInstance } from '../redux/axois';
 function Search() {
     const navigate=useNavigate()
     const[input,setInput]=useState(null)
@@ -15,7 +16,7 @@ function Search() {
     const handleSearch=async ()=>{
      
         try {
-            const result=await axios.get(`${serverUrl}/api/user/search?keyWord=${input}`,{withCredentials:true})
+            const result=await axiosInstance.get(`${serverUrl}/api/user/search?keyWord=${input}`,{withCredentials:true})
            setSearchData(result.data)
             console.log(result.data)
         } catch (error) {

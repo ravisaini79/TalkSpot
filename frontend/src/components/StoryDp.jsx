@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { serverUrl } from '../App';
+import { axiosInstance } from '../redux/axois';
 function StoryDp({ProfileImage,userName,story}) {
 const navigate=useNavigate()
 const{ userData}=useSelector(state=>state.user)
@@ -23,7 +24,7 @@ useEffect(()=>{
 },[story,userData,storyData,storyList])
 const handleViewers=async ()=>{
   try {
-    const result=await axios.get(`${serverUrl}/api/story/view/${story._id}`,{withCredentials:true})
+    const result=await axiosInstance.get(`${serverUrl}/api/story/view/${story._id}`,{withCredentials:true})
     
   } catch (error) {
     console.log(error)

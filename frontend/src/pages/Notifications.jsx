@@ -7,6 +7,7 @@ import axios from 'axios';
 import { serverUrl } from '../App';
 import getAllNotifications from '../hooks/getAllNotifications';
 import { setNotificationData } from '../redux/userSlice';
+import { axiosInstance } from '../redux/axois';
 function Notifications() {
     const navigate=useNavigate()
     const {notificationData}=useSelector(state=>state.user)
@@ -14,7 +15,7 @@ function Notifications() {
     const dispatch=useDispatch()
     const markAsRead=async ()=>{
         try {
-            const result=await axios.post(`${serverUrl}/api/user/markAsRead`,{notificationId:ids},{withCredentials:true})
+            const result=await axiosInstance.post(`${serverUrl}/api/user/markAsRead`,{notificationId:ids},{withCredentials:true})
           await fetchNotifications()
         } catch (error) {
             console.log(error)
@@ -22,7 +23,7 @@ function Notifications() {
     }
 const fetchNotifications=async ()=>{
     try {
-        const result=await axios.get(`${serverUrl}/api/user/getAllNotifications`,{withCredentials:true})
+        const result=await axiosInstance.get(`${serverUrl}/api/user/getAllNotifications`,{withCredentials:true})
          dispatch(setNotificationData(result.data))
     } catch (error) {
         console.log(error)

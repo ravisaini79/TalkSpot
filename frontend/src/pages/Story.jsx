@@ -5,6 +5,7 @@ import { serverUrl } from '../App'
 import { useDispatch, useSelector } from 'react-redux'
 import { setStoryData } from '../redux/storySlice'
 import StoryCard from '../components/StoryCard'
+import { axiosInstance } from '../redux/axois'
 
 function Story() {
     const {userName}=useParams()
@@ -14,7 +15,7 @@ function Story() {
     const handleStory=async ()=>{
       dispatch(setStoryData(null))
         try {
-            const result=await axios.get(`${serverUrl}/api/story/getByUserName/${userName}`,{withCredentials:true})
+            const result=await axiosInstance.get(`${serverUrl}/api/story/getByUserName/${userName}`,{withCredentials:true})
             dispatch(setStoryData(result.data[0]))
             console.log(storyData)
         } catch (error) {

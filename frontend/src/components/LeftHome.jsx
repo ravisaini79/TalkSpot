@@ -8,6 +8,7 @@ import { serverUrl } from '../App';
 import { setUserData } from '../redux/userSlice';
 import OtherUser from './OtherUser';
 import Notifications from '../pages/Notifications';
+import { axiosInstance } from '../redux/axois';
 function LeftHome() {
 
     const {userData ,suggestedUsers}=useSelector(state=>state.user)
@@ -16,7 +17,7 @@ const dispatch=useDispatch()
 const {notificationData}=useSelector(state=>state.user)
     const handleLogOut=async ()=>{
         try {
-            const result=await axios.get(`${serverUrl}/api/auth/signout`,{withCredentials:true})
+            const result=await axiosInstance.get(`${serverUrl}/api/auth/signout`,{withCredentials:true})
             dispatch(setUserData(null))
         } catch (error) {
             console.log(error)

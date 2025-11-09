@@ -15,26 +15,31 @@ dotenv.config()
 const port=process.env.PORT || 5000
 const allowedOrigins = [
   "http://localhost:5173",             // Local frontend (Vite)
-   "http://localhost:5174",  
-  "https://talk-spot-three.vercel.app",
+  "http://localhost:5174",  
+  "https://talk-spot-three.vercel.app", // Main production frontend
 ];
 
-
+// ✅ Use dynamic origin handling
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like curl / Postman)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
+      if (!origin) return callback(null, true); // Allow tools like Postman
+      if (
+        allowedOrigins.includes(origin) ||
+        origin.endsWith(".vercel.app") // ✅ Allow all Vercel preview domains
+      ) {
         return callback(null, true);
       } else {
         console.log("❌ Blocked by CORS:", origin);
         return callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, // ✅ Allow sending cookies (JWT)
+    credentials: true, // ✅ Required for cookies (JWT in cookies)
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // ✅ Allow all relevant methods
+    allowedHeaders: ["Content-Type", "Authorization"], // ✅ Allow custom headers
   })
 );
+
 app.use(express.json())
 app.use(cookieParser())
 

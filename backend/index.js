@@ -16,7 +16,7 @@ const port=process.env.PORT || 5000
 const allowedOrigins = [
   "http://localhost:5173",             // Local frontend (Vite)
    "http://localhost:5174",  
-  "https://talk-spot-three.vercel.app/",
+  "https://talk-spot-three.vercel.app",
   ENV.CLIENT_URL,                      // Production frontend (Vercel)
 ];
 

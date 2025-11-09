@@ -1,33 +1,32 @@
-import http from "http"
-import express from "express"
-import { Server } from "socket.io"
-const app=express()
-const server=http.createServer(app)
+import http from "http";
+import express from "express";
+import { Server } from "socket.io";
 
-// const io=new Server(server,{
-//     cors:{
-//         origin:"http://localhost:5174",
-//         methods:["GET","POST"]
-//     }
-// })
+const app = express();
+const server = http.createServer(app);
 
+// ✅ All frontend origins allowed (local + Vercel)
 const allowedOrigins = [
-  "http://localhost:5173",             // Local frontend (Vite)
-  "http://localhost:5174",  
-  "https://talk-spot-three.vercel.app", // Main production frontend
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "https://talk-spot-three.vercel.app",
 ];
 
-// ✅ Initialize Socket.IO with flexible CORS handling
+// ✅ Initialize Socket.IO with flexible CORS
 export const io = new Server(server, {
   cors: {
     origin: (origin, callback) => {
-      if (!origin) return callback(null, true); // Allow server-to-server/internal
+      // Allow requests without origin (like server-to-server)
+      if (!origin) return callback(null, true);
+
+      // ✅ Allow known and preview Vercel domains
       if (
         allowedOrigins.includes(origin) ||
-        origin.endsWith(".vercel.app") // Allow all vercel preview domains
+        origin.endsWith(".vercel.app")
       ) {
         return callback(null, true);
       }
+
       console.log("❌ Socket blocked by CORS:", origin);
       return callback(new Error("Not allowed by CORS"));
     },
@@ -36,27 +35,36 @@ export const io = new Server(server, {
   },
 });
 
-const userSocketMap={}
+// ✅ Store userId -> socketId mapping
+const userSocketMap = {};
 
-export const getSocketId=(receiverId)=>{
-return userSocketMap[receiverId]
-}
+// ✅ Helper to find receiver's socket ID
+export const getSocketId = (receiverId) => userSocketMap[receiverId];
 
-io.on("connection",(socket)=>{
-   const userId=socket.handshake.query.userId
-   if(userId!=undefined){
-    userSocketMap[userId]=socket.id
-   }
+// ✅ Handle socket connections
+io.on("connection", (socket) => {
+  try {
+    const userId = socket.handshake.query.userId;
 
- io.emit('getOnlineUsers',Object.keys(userSocketMap))  
+    if (userId) {
+      userSocketMap[userId] = socket.id;
+      console.log(`🟢 User connected: ${userId}`);
+    }
 
+    // Send all online users to everyone
+    io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
-socket.on('disconnect',()=>{
-    delete userSocketMap[userId]
-     io.emit('getOnlineUsers',Object.keys(userSocketMap))  
-})
+    // ✅ Handle disconnect
+    socket.on("disconnect", () => {
+      if (userId) {
+        delete userSocketMap[userId];
+        console.log(`🔴 User disconnected: ${userId}`);
+      }
+      io.emit("getOnlineUsers", Object.keys(userSocketMap));
+    });
+  } catch (error) {
+    console.error("Socket error:", error);
+  }
+});
 
-})
-
-
-export {app,io, server}
+export { app, server };
